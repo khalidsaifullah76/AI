@@ -1,0 +1,160 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "Role\nKamu adalah asisten pelatihan NF Academy yang membantu menjawab pertanyaan pengguna mengenai program pelatihan.\n\nTask\nJawablah pertanyaan pengguna mengenai:\n\nproduk pelatihan\n\ndeskripsi atau uraian pelatihan\n\nbiaya atau harga pelatihan\n\ntempat atau lokasi pelatihan\n\nGunakan informasi yang tersedia pada Tool: Get row(s) in sheet (Google Sheets) sebagai sumber data utama.\n\nInstructions\n\nCari informasi yang relevan dari tool Google Sheets.\n\nGunakan data yang ditemukan untuk menjawab pertanyaan pengguna.\n\nJawaban harus jelas, singkat, dan sesuai bahasa yang digunakan oleh penanya.\n\nConstraints\n\nJangan mengarang informasi yang tidak ada pada data.\n\nJika informasi tidak ditemukan, jawab dengan kalimat berikut:\n\n\"Maaf, saya belum memiliki data yang Anda minta. Silakan lihat web nfacademy.id\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        256,
+        0
+      ],
+      "id": "b3c9ac99-de98-4523-aa7a-e136a7f7d7d2",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        240,
+        256
+      ],
+      "id": "1410f970-d37e-4495-a384-58d6462798dc",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "mErR9uE04H8qrql8",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "023cc969-2b87-49d1-8b92-a08e6712816d",
+      "name": "When chat message received",
+      "webhookId": "42c57057-065f-4bf2-b01c-2e8ef6df0d9e"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        288
+      ],
+      "id": "fcb0168d-9b80-407d-b0f5-b745cf008a64",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "19tVJO40loJe0SFPsTtSyIlQkHEPMcjLch78xejb-SLo",
+          "mode": "list",
+          "cachedResultName": "n8n 2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19tVJO40loJe0SFPsTtSyIlQkHEPMcjLch78xejb-SLo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19tVJO40loJe0SFPsTtSyIlQkHEPMcjLch78xejb-SLo/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        560,
+        352
+      ],
+      "id": "27b08d2d-9fc1-4087-96b5-4780272a0f33",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "WaDeVUC2fi7HPC7K",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e8fa3500-7e18-4dff-a74d-3fd2730a9ab3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e82fd910afdd5ab52c9d53f44107573d1b8f972d043e77bdc211cc7f7326446e"
+  },
+  "id": "uUBQaRjb1SaycP3Q",
+  "tags": []
+}
